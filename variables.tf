@@ -13,3 +13,9 @@ variable "resource_tags" {
   description = "Resource Tags"
   default     = {}
 }
+
+variable "count" {
+  type        = "string"
+  description = "Number of ec2 instances"
+  default     = 1
+}

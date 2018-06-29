@@ -42,6 +42,7 @@ resource "aws_security_group" "ssh" {
 resource "aws_instance" "web" {
   ami           = "${data.aws_ami.ubuntu.id}"
   instance_type = "t2.micro"
+  count         = "${var.count}"
   tags          = "${var.resource_tags}"
   subnet_id     = "${data.terraform_remote_state.network.public_subnet}"
   key_name      = "${data.terraform_remote_state.network.key_name}"
