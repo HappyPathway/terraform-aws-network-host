@@ -9,3 +9,7 @@ output "instances" {
 output "hosts" {
   value = "${aws_instance.web.*.public_ip}"
 }
+
+output "key_name" {
+  value = "${data.terraform_remote_state.network.key_name}"
+}
