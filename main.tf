@@ -1,0 +1,53 @@
+data "terraform_remote_state" "network" {
+  backend = "atlas"
+
+  config {
+    name = "${var.organization}/${var.network_ws}"
+  }
+}
+
+provider "aws" {
+  region = "${data.terraform_remote_state.network.region}"
+}
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] # Canonical
+}
+
+resource "aws_security_group" "ssh" {
+  name        = "allow_all"
+  description = "Allow all inbound traffic"
+  vpc_id      = "${aws_vpc.main.id}"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_instance" "web" {
+  ami           = "${data.aws_ami.ubuntu.id}"
+  instance_type = "t2.micro"
+  tags          = "${var.resource_tags}"
+  subnet_id     = "${data.terraform_remote_state.network.public_subnet}"
+  key_name      = "${data.terraform_remote_state.network.key_name}"
+
+  security_groups = [
+    "${data.terraform_remote_state.admin_sg}",
+    "${aws_security_group.ssh.id}",
+  ]
+}
