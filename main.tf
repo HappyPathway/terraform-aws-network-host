@@ -29,7 +29,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_security_group" "ssh" {
   name        = "allow_all"
   description = "Allow all inbound traffic"
-  vpc_id      = "${aws_vpc.main.id}"
+  vpc_id      = "${data.terraform_remote_state.network.vpc_id}"
 
   ingress {
     from_port   = 22
