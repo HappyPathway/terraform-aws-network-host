@@ -48,7 +48,7 @@ resource "aws_instance" "web" {
   key_name      = "${data.terraform_remote_state.network.key_name}"
 
   security_groups = [
-    "${data.terraform_remote_state.admin_sg}",
+    "${data.terraform_remote_state.network.admin_sg}",
     "${aws_security_group.ssh.id}",
   ]
 }
