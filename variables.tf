@@ -23,5 +23,5 @@ variable "count" {
 variable "user_data" {
   type        = "string"
   description = "Provider User Data to EC2 Instance"
-  default     = "${path.module}/userdata.sh"
+  default     = "./userdata.sh"
 }
