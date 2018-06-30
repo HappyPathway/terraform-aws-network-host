@@ -54,7 +54,7 @@ resource "aws_instance" "web" {
   subnet_id     = "${data.terraform_remote_state.network.public_subnet}"
 
   # No Keyname as we're leveraging VAULT SSH CA
-  key_name  = "${data.terraform_remote_state.network.key_name}"
+  # key_name  = "${data.terraform_remote_state.network.key_name}"
   user_data = "${var.user_data}"
 
   security_groups = [
