@@ -44,11 +44,11 @@ resource "aws_iam_role" "air" {
 
 resource "aws_iam_role_policy" "airp" {
   name   = "${var.tfe_organization}-${lookup(var.resource_tags, "Role")}"
-  role   = "${aws_iam_role.hashistack.id}"
+  role   = "${aws_iam_role.air.id}"
   policy = "${data.aws_iam_policy_document.hashistack.json}"
 }
 
 resource "aws_iam_instance_profile" "aiip" {
   name = "${var.tfe_organization}-${lookup(var.resource_tags, "Role")}"
-  role = "${aws_iam_role.hashistack.name}"
+  role = "${aws_iam_role.airp.name}"
 }
