@@ -38,17 +38,17 @@ data "aws_iam_policy_document" "hashistack" {
 }
 
 resource "aws_iam_role" "air" {
-  name               = "${var.tfe_organization}-${lookup(var.resource_tags, "Role")}"
+  name               = "${var.organization}-${lookup(var.resource_tags, "Role")}"
   assume_role_policy = "${data.aws_iam_policy_document.assume_role.json}"
 }
 
 resource "aws_iam_role_policy" "airp" {
-  name   = "${var.tfe_organization}-${lookup(var.resource_tags, "Role")}"
+  name   = "${var.organization}-${lookup(var.resource_tags, "Role")}"
   role   = "${aws_iam_role.air.id}"
   policy = "${data.aws_iam_policy_document.hashistack.json}"
 }
 
 resource "aws_iam_instance_profile" "aiip" {
-  name = "${var.tfe_organization}-${lookup(var.resource_tags, "Role")}"
+  name = "${var.organization}-${lookup(var.resource_tags, "Role")}"
   role = "${aws_iam_role.airp.name}"
 }
