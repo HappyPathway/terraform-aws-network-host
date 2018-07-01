@@ -10,7 +10,7 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
-data "aws_iam_policy_document" "hashistack" {
+data "aws_iam_policy_document" "aipd" {
   statement {
     sid       = "AllowSelfAssembly"
     effect    = "Allow"
@@ -41,10 +41,10 @@ resource "aws_iam_role" "air" {
 resource "aws_iam_role_policy" "airp" {
   name   = "${var.organization}-${lookup(var.resource_tags, "Role")}"
   role   = "${aws_iam_role.air.id}"
-  policy = "${data.aws_iam_policy_document.hashistack.json}"
+  policy = "${data.aws_iam_policy_document.aipd.json}"
 }
 
 resource "aws_iam_instance_profile" "aiip" {
   name = "${var.organization}-${lookup(var.resource_tags, "Role")}"
-  role = "${aws_iam_role.airp.name}"
+  role = "${aws_iam_role.air.name}"
 }
