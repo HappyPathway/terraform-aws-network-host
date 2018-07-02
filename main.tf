@@ -27,7 +27,7 @@ data "aws_ami" "ubuntu" {
 }
 
 resource "aws_security_group" "ssh" {
-  name        = "${lookup(var.resource_tags, "Owner")}-${lookup(var.resource_tags, "Role")}-${data.terraform_remote_state.network.vpc_id}"
+  name        = "${lookup(var.resource_tags, "Owner")}-${lookup(var.resource_tags, "env")}-${data.terraform_remote_state.network.vpc_id}"
   description = "Allow all inbound traffic"
   vpc_id      = "${data.terraform_remote_state.network.vpc_id}"
 
