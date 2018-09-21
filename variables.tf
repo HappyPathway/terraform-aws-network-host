@@ -31,3 +31,9 @@ variable "instance_type" {
   type = "string"
   description = "EC2 Instance Type"
 }
+
+variable "ssh_cidr" {
+  type = "string"
+  default = "0.0.0.0/0"
+  description = "SSH Access CIDR"
+}
