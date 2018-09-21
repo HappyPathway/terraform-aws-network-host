@@ -25,3 +25,9 @@ variable "user_data" {
   description = "Provider User Data to EC2 Instance"
   default     = "userdata.sh"
 }
+
+
+variable "instance_type" {
+  type = "string"
+  description = "EC2 Instance Type"
+}
