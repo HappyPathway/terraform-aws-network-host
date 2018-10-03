@@ -46,12 +46,38 @@ resource "aws_security_group" "ssh" {
   }
 }
 
-resource "aws_instance" "web" {
+locals {
+  public_subnets = "${data.terraform_remote_state.network.public_subnets}"
+  private_subnets = "${data.terraform_remote_state.network.private_subnets}"
+  public_instances = "${var.public_instances == -1 ? length(local.public_subnets) : var.public_instances}"
+  private_instances = "${var.private_instances == -1 ? length(local.private_subnets) : var.private_instances}"
+}
+
+resource "aws_instance" "public_web" {
+  count                = "${local.public_instances)}"
   ami                  = "${data.aws_ami.ubuntu.id}"
   instance_type        = "${var.instance_type}"
   count                = "${var.count}"
   tags                 = "${var.resource_tags}"
-  subnet_id            = "${data.terraform_remote_state.network.public_subnet}"
+  subnet_id            = "${element(local.public_subnets, count.index)}"
+  iam_instance_profile = "${aws_iam_instance_profile.aiip.name}"
+
+  # No Keyname as we're leveraging VAULT SSH CA
+  # key_name  = "${data.terraform_remote_state.network.key_name}"
+  user_data = "${var.user_data}"
+
+  security_groups = [
+    "${data.terraform_remote_state.network.admin_sg}",
+    "${aws_security_group.ssh.id}",
+  ]
+}
+
+resource "aws_instance" "private_web" {
+  count                = "${local.private_instances)}"
+  ami                  = "${data.aws_ami.ubuntu.id}"
+  instance_type        = "${var.instance_type}"
+  tags                 = "${var.resource_tags}"
+  subnet_id            = "${element(local.private_subnets, count.index)}"
   iam_instance_profile = "${aws_iam_instance_profile.aiip.name}"
 
   # No Keyname as we're leveraging VAULT SSH CA
