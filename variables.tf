@@ -8,6 +8,18 @@ variable "network_ws" {
   description = "TFE Network Workspace"
 }
 
+variable "public_service_port" {
+  default = "8000"
+  description = "Port of Public Service"
+  type = "string"
+}
+
+variable "service_cidr" {
+  default = "0.0.0.0/0"
+  type = "string"
+  description = "CIDR Access"
+}
+
 variable "resource_tags" {
   type        = "map"
   description = "Resource Tags"
