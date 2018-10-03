@@ -54,7 +54,7 @@ locals {
 }
 
 resource "aws_instance" "public_web" {
-  count                = "${local.public_instances)}"
+  count                = "${local.public_instances}"
   ami                  = "${data.aws_ami.ubuntu.id}"
   instance_type        = "${var.instance_type}"
   count                = "${var.count}"
@@ -73,7 +73,7 @@ resource "aws_instance" "public_web" {
 }
 
 resource "aws_instance" "private_web" {
-  count                = "${local.private_instances)}"
+  count                = "${local.private_instances}"
   ami                  = "${data.aws_ami.ubuntu.id}"
   instance_type        = "${var.instance_type}"
   tags                 = "${var.resource_tags}"
