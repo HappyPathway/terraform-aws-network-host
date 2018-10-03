@@ -14,10 +14,16 @@ variable "resource_tags" {
   default     = {}
 }
 
-variable "count" {
+variable "public_instances" {
   type        = "string"
-  description = "Number of ec2 instances"
-  default     = 1
+  description = "Number of Public ec2 instances"
+  default     = -1
+}
+
+variable "private_instances" {
+  type        = "string"
+  description = "Number of Private ec2 instances"
+  default     = -1
 }
 
 variable "user_data" {
