@@ -6,8 +6,12 @@ output "instances" {
   value = "${aws_instance.web.*.id}"
 }
 
-output "hosts" {
-  value = "${aws_instance.web.*.public_ip}"
+output "private_hosts" {
+  value = "${aws_instance.private_web.*.private_ip}"
+}
+
+output "public_hosts" {
+  value = "${aws_instance.public_web.*.public_ip}"
 }
 
 output "key_name" {
