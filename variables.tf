@@ -13,7 +13,7 @@ variable "resource_tags" {
   description = "Resource Tags"
   default     = {
     env = "default"
-    owner = "Darnold"
+    Owner = "Darnold"
     ttl = 24
     }
 }
