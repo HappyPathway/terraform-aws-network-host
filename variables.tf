@@ -11,7 +11,11 @@ variable "network_ws" {
 variable "resource_tags" {
   type        = "map"
   description = "Resource Tags"
-  default     = {}
+  default     = {
+    env = "default"
+    owner = "Darnold"
+    ttl = 24
+    }
 }
 
 variable "public_instances" {
