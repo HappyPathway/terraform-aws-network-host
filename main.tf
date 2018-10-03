@@ -67,7 +67,6 @@ resource "aws_instance" "public_web" {
   user_data = "${var.user_data}"
 
   security_groups = [
-    "${data.terraform_remote_state.network.admin_sg}",
     "${aws_security_group.ssh.id}",
   ]
 }
@@ -85,7 +84,7 @@ resource "aws_instance" "private_web" {
   user_data = "${var.user_data}"
 
   security_groups = [
-    "${data.terraform_remote_state.network.admin_sg}",
+    "${element(data.terraform_remote_state.network.admin_sgs, count.index)}",
     "${aws_security_group.ssh.id}",
   ]
 }
