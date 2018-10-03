@@ -46,6 +46,27 @@ resource "aws_security_group" "ssh" {
   }
 }
 
+resource "aws_security_group" "service" {
+  count       = "${var.public_service_port != "" ? 1 : 0}"
+  name        = "${lookup(var.resource_tags, "Owner")}-${lookup(var.resource_tags, "env")}-${data.terraform_remote_state.network.vpc_id}-service"
+  description = "Allow all inbound traffic"
+  vpc_id      = "${data.terraform_remote_state.network.vpc_id}"
+
+  ingress {
+    from_port   = "${var.public_service_port}"
+    to_port     = "${var.public_service_port}"
+    protocol    = "tcp"
+    cidr_blocks = ["${var.service_cidr}"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 locals {
   public_subnets = "${data.terraform_remote_state.network.public_subnets}"
   private_subnets = "${data.terraform_remote_state.network.private_subnets}"
