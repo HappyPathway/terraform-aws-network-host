@@ -89,6 +89,7 @@ resource "aws_instance" "public_web" {
 
   security_groups = [
     "${aws_security_group.ssh.id}",
+    "${aws_security_group.service.id}"
   ]
 }
 
