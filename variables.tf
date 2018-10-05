@@ -5,7 +5,7 @@ variable "organization" {
 
 variable "env" {
   type = "string"
-  descriptino = "Environment Name"
+  description = "Environment Name"
 }
 
 variable "network_ws" {
