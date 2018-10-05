@@ -3,6 +3,11 @@ variable "organization" {
   description = "TFE Organziation Name"
 }
 
+variable "env" {
+  type = "string"
+  descriptino = "Environment Name"
+}
+
 variable "network_ws" {
   type        = "string"
   description = "TFE Network Workspace"
