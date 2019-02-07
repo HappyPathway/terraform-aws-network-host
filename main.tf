@@ -62,8 +62,8 @@ resource "aws_security_group" "service" {
 locals {
   public_subnet = "${var.public_subnet}"
   private_subnet = "${var.private_subnet}"
-  public_instances = "${var.public_instances == -1 ? length(local.public_subnets) : var.public_instances}"
-  private_instances = "${var.private_instances == -1 ? length(local.private_subnets) : var.private_instances}"
+  public_instances = "${var.public_instances == -1 ? length(local.public_subnet) : var.public_instances}"
+  private_instances = "${var.private_instances == -1 ? length(local.private_subnet) : var.private_instances}"
 }
 
 resource "aws_instance" "public_web" {
