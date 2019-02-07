@@ -3,6 +3,10 @@ variable "organization" {
   description = "TFE Organziation Name"
 }
 
+variable "region" {
+  default = "us-east-1"
+}
+
 variable "env" {
   type = "string"
   description = "Environment Name"
