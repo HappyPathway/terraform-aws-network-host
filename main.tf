@@ -19,7 +19,7 @@ data "aws_ami" "ubuntu" {
 }
 
 resource "aws_security_group" "ssh" {
-  name        = "${lookup(var.resource_tags, "Owner")}-${lookup(var.resource_tags, "env")}-${data.terraform_remote_state.network.vpc_id}"
+  name        = "${lookup(var.resource_tags, "Owner")}-${lookup(var.resource_tags, "env")}-${var.vpc_id}"
   description = "Allow all inbound traffic"
   vpc_id      = "${var.vpc_id}"
 
@@ -40,7 +40,7 @@ resource "aws_security_group" "ssh" {
 
 resource "aws_security_group" "service" {
   count       = "${var.public_service_port != "" ? 1 : 0}"
-  name        = "${lookup(var.resource_tags, "Owner")}-${lookup(var.resource_tags, "env")}-${data.terraform_remote_state.network.vpc_id}-service"
+  name        = "${lookup(var.resource_tags, "Owner")}-${lookup(var.resource_tags, "env")}-${var.vpc_id}-service"
   description = "Allow all inbound traffic"
   vpc_id      = "${var.vpc_id}"
 
@@ -74,9 +74,6 @@ resource "aws_instance" "public_web" {
   tags                 = "${var.resource_tags}"
   subnet_id            = "${element(local.public_subnet, count.index)}"
   iam_instance_profile = "${aws_iam_instance_profile.aiip.name}"
-
-  # No Keyname as we're leveraging VAULT SSH CA
-  # key_name  = "${data.terraform_remote_state.network.key_name}"
   user_data = "${var.user_data}"
 
   security_groups = [
@@ -92,9 +89,6 @@ resource "aws_instance" "private_web" {
   tags                 = "${var.resource_tags}"
   subnet_id            = "${element(local.private_subnet, count.index)}"
   iam_instance_profile = "${aws_iam_instance_profile.aiip.name}"
-
-  # No Keyname as we're leveraging VAULT SSH CA
-  # key_name  = "${data.terraform_remote_state.network.key_name}"
   user_data = "${var.user_data}"
 
   security_groups = [
