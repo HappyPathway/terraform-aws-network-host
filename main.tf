@@ -55,20 +55,13 @@ resource "aws_security_group" "service" {
   }
 }
 
-locals {
-  public_subnet = "${var.public_subnet}"
-  private_subnet = "${var.private_subnet}"
-  public_instances = "${var.public_instances == -1 ? length(local.public_subnet) : var.public_instances}"
-  private_instances = "${var.private_instances == -1 ? length(local.private_subnet) : var.private_instances}"
-}
-
-resource "aws_instance" "public_web" {
+resource "aws_instance" "instance" {
   count                = "${local.public_instances}"
   ami                  = "${data.aws_ami.ubuntu.id}"
   instance_type        = "${var.instance_type}"
   count                = "${var.count}"
   tags                 = "${var.resource_tags}"
-  subnet_id            = "${element(local.public_subnet, count.index)}"
+  subnet_id            = "${var.subnet_id}"
   iam_instance_profile = "${aws_iam_instance_profile.aiip.name}"
   user_data = "${var.user_data}"
 
@@ -78,20 +71,3 @@ resource "aws_instance" "public_web" {
   ]
 }
 
-resource "aws_instance" "private_web" {
-  count                = "${local.private_instances}"
-  ami                  = "${data.aws_ami.ubuntu.id}"
-  instance_type        = "${var.instance_type}"
-  tags                 = "${var.resource_tags}"
-  subnet_id            = "${element(local.private_subnet, count.index)}"
-  iam_instance_profile = "${aws_iam_instance_profile.aiip.name}"
-  user_data = "${var.user_data}"
-
-  security_groups = [
-    "${aws_security_group.ssh.id}",
-  ]
-}
-
-
-# second run
-# adding PR run to show TFE Plan
