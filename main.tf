@@ -56,10 +56,9 @@ resource "aws_security_group" "service" {
 }
 
 resource "aws_instance" "instance" {
-  count                = "${local.public_instances}"
+  count                = "${var.instances}"
   ami                  = "${data.aws_ami.ubuntu.id}"
   instance_type        = "${var.instance_type}"
-  count                = "${var.count}"
   tags                 = "${var.resource_tags}"
   subnet_id            = "${var.subnet_id}"
   iam_instance_profile = "${aws_iam_instance_profile.aiip.name}"
