@@ -1,13 +1,5 @@
-data "terraform_remote_state" "network" {
-  backend = "atlas"
-
-  config {
-    name = "${var.organization}/${var.network_ws}"
-  }
-}
-
 provider "aws" {
-  region = "${data.terraform_remote_state.network.region}"
+  region = "${var.region}"
 }
 
 data "aws_ami" "ubuntu" {
@@ -50,7 +42,7 @@ resource "aws_security_group" "service" {
   count       = "${var.public_service_port != "" ? 1 : 0}"
   name        = "${lookup(var.resource_tags, "Owner")}-${lookup(var.resource_tags, "env")}-${data.terraform_remote_state.network.vpc_id}-service"
   description = "Allow all inbound traffic"
-  vpc_id      = "${data.terraform_remote_state.network.vpc_id}"
+  vpc_id      = "${var.vpc_id}"
 
   ingress {
     from_port   = "${var.public_service_port}"
@@ -68,8 +60,8 @@ resource "aws_security_group" "service" {
 }
 
 locals {
-  public_subnets = "${data.terraform_remote_state.network.public_subnets}"
-  private_subnets = "${data.terraform_remote_state.network.private_subnets}"
+  public_subnet = "${var.public_subnet}"
+  private_subnet = "${var.private_subnet}"
   public_instances = "${var.public_instances == -1 ? length(local.public_subnets) : var.public_instances}"
   private_instances = "${var.private_instances == -1 ? length(local.private_subnets) : var.private_instances}"
 }
@@ -80,7 +72,7 @@ resource "aws_instance" "public_web" {
   instance_type        = "${var.instance_type}"
   count                = "${var.count}"
   tags                 = "${var.resource_tags}"
-  subnet_id            = "${element(local.public_subnets, count.index)}"
+  subnet_id            = "${element(local.public_subnet, count.index)}"
   iam_instance_profile = "${aws_iam_instance_profile.aiip.name}"
 
   # No Keyname as we're leveraging VAULT SSH CA
@@ -98,7 +90,7 @@ resource "aws_instance" "private_web" {
   ami                  = "${data.aws_ami.ubuntu.id}"
   instance_type        = "${var.instance_type}"
   tags                 = "${var.resource_tags}"
-  subnet_id            = "${element(local.private_subnets, count.index)}"
+  subnet_id            = "${element(local.private_subnet, count.index)}"
   iam_instance_profile = "${aws_iam_instance_profile.aiip.name}"
 
   # No Keyname as we're leveraging VAULT SSH CA
