@@ -21,7 +21,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_security_group" "ssh" {
   name        = "${lookup(var.resource_tags, "Owner")}-${lookup(var.resource_tags, "env")}-${data.terraform_remote_state.network.vpc_id}"
   description = "Allow all inbound traffic"
-  vpc_id      = "${data.terraform_remote_state.network.vpc_id}"
+  vpc_id      = "${var.vpc_id}"
 
   ingress {
     from_port   = 22
@@ -98,7 +98,6 @@ resource "aws_instance" "private_web" {
   user_data = "${var.user_data}"
 
   security_groups = [
-    "${element(data.terraform_remote_state.network.admin_sgs, count.index)}",
     "${aws_security_group.ssh.id}",
   ]
 }
