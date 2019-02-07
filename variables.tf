@@ -8,9 +8,13 @@ variable "env" {
   description = "Environment Name"
 }
 
-variable "network_ws" {
-  type        = "string"
-  description = "TFE Network Workspace"
+variable "vpc_id" {}
+variable "private_subnet" {
+  default = ""
+}
+
+variable "public_subnet" {
+  default = ""
 }
 
 variable "public_service_port" {
