@@ -63,7 +63,7 @@ resource "aws_instance" "instance" {
   subnet_id            = "${var.subnet_id}"
   iam_instance_profile = "${aws_iam_instance_profile.aiip.name}"
   user_data = "${var.user_data}"
-
+  key_name = "${var.key_name}"
   security_groups = [
     "${aws_security_group.ssh.id}",
     "${aws_security_group.service.id}"
