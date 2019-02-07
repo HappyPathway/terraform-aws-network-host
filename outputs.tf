@@ -19,10 +19,6 @@ output "public_hosts" {
   value = "${aws_instance.public_web.*.public_ip}"
 }
 
-output "key_name" {
-  value = "${data.terraform_remote_state.network.key_name}"
-}
-
 output "role" {
   value = "${var.organization}-${lookup(var.resource_tags, "env")}"
 }
