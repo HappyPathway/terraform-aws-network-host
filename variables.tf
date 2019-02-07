@@ -13,6 +13,9 @@ variable "env" {
 }
 
 variable "vpc_id" {}
+
+variable "subnet_id" {}
+
 variable "private_subnet" {
   default = ""
 }
